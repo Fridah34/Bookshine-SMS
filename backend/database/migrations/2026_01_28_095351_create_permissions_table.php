@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique(); //manage-students, view-grades
+            $table->string('display_name');
+            $table->text('description')->nullable();
+            $table->string('module')->nullable(); //students, grades, attendance
             $table->timestamps();
+
+            //Indexes
+            $table-> index('name');
+            $table->index('module');
         });
     }
 

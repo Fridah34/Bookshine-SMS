@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('display_name');
+            $table->string('description')->nullable();
+            $table->tinyInteger('level')->default(99);
             $table->timestamps();
+
+            //Indexes
+            $table->index('name');
+            $table->index('level');
         });
     }
 
