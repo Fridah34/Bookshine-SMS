@@ -1,0 +1,118 @@
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
+// Auth
+import { AuthProvider, useAuth } from "./hooks/useAuth.jsx";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+
+// Layouts
+import AuthLayout from "./components/layout/AuthLayout";
+import {DashboardLayout} from "./components/layout/DashboardLayout";
+
+// Pages
+import { AdminDashboard }from "./pages/admin/AdminDashboard";
+import {TeacherDashboard} from "./pages/teacher/TeacherDashboard";
+import {StudentDashboard} from "./pages/student/StudentDashboard";
+
+/* -----------------------------
+   INLINE PROTECTED ROUTE (RBAC)
+------------------------------ */
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  // Not logged in
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  // Role-based restriction
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to={`/${user.role}`} replace />;
+  }
+
+  return children;
+};
+
+/* -----------------------------
+   SCROLL TO TOP ON ROUTE CHANGE
+------------------------------ */
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
+/* -----------------------------
+   MAIN APP
+------------------------------ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <ScrollToTop />
+
+        <Routes>
+
+          {/* DEFAULT */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+
+          {/* AUTH ROUTES */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+
+          {/* ADMIN ROUTES */}
+          <Route
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <DashboardLayout role="admin" />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/admin" element={<AdminDashboard />} />
+          </Route>
+
+          {/* TEACHER ROUTES */}
+          <Route
+            element={
+              <ProtectedRoute allowedRoles={["teacher"]}>
+                <DashboardLayout role="teacher" />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/teacher" element={<TeacherDashboard />} />
+          </Route>
+
+          {/* STUDENT ROUTES */}
+          <Route
+            element={
+              <ProtectedRoute allowedRoles={["student"]}>
+                <DashboardLayout role="student" />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/student" element={<StudentDashboard />} />
+          </Route>
+
+          {/* FALLBACK */}
+          <Route
+            path="*"
+            element={
+              <h1 className="text-center mt-10 text-xl font-semibold">
+                404 – Page Not Found
+              </h1>
+            }
+          />
+
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
