@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('admission_number')->unique();
-            $table->foreignId('class_id')->nullable()->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('class_id')->nullable()->constrained()->onDelete('cascade');
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->text('address')->nullable();
