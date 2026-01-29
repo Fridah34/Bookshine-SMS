@@ -22,7 +22,10 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role',
+        'phone',
+        'profile_photo',
+        'is-active',
+        'last_login_at',
     ];
 
     /**
@@ -44,7 +47,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login-at'=> 'datetime',
             'password' => 'hashed',
+            'is_active'=> 'boolean',
         ];
     }
 
@@ -58,37 +63,126 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [ 
-            'role' => $this->role,
+            'roles' => $this->roles->pluck('name'),
             'name' => $this->name,
+            'email'=>$this->email,
         ];
+    }
+
+    //relationships
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user')
+            ->withPivot ('assigned_by', "assigned_at")
+            ->withTimestamps();
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+     public function parent()
+    {
+        return $this->hasOne(ParentModel::class);
+    }
+
+    //roles &permission methods
+    public function hasRole($role)
+    {
+        if (is_array($role)) {
+            return $this->roles()->whereIn('name', $role)->exists();
+        }
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
+    }
+
+    public function assignRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+
+        if (!$this->roles()->where('role_id', $role->id)->exists()) {
+            $this->roles()->attach($role->id, [
+                'assigned_by' => auth()->id(),
+                'assigned_at' => now(),
+            ]);
+        }
+
+        return $this;
+    }
+
+    public function removeRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+
+        $this->roles()->detach($role->id);
+        return $this;
+    }
+
+    public function syncRoles($roles)
+    {
+        $roleIds = collect($roles)->map(function ($role) {
+            if (is_string($role)) {
+                return Role::where('name', $role)->firstOrFail()->id;
+            }
+            return $role;
+        })->toArray();
+
+        $this->roles()->sync($roleIds);
+        return $this;
     }
 
     //Role checking methods
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->hasRole( 'admin');
     }
 
     public function isTeacher()
     {
-        return $this->role === 'teacher';
+        return $this->hasRole('teacher');
     }
 
     public function isStudent()
     {
-        return $this->role === 'student';
+        return $this->hasRole('student');
     }
 
     public function isParent()
     {
-        return $this->role === 'parent';
+        return $this->hasRole ('parent');
     }
 
-    public function hasRole($role)
+    // Scopes
+    public function scopeActive($query)
     {
-        if(is_array($role)) {
-            return in_array($this->role, $role);
-        }
-        return $this->role === $role;
+        return $query->where('is_active', true);
+    }
+
+    public function scopeWithRole($query, $role)
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('name', $role);
+        });
     }
 }
