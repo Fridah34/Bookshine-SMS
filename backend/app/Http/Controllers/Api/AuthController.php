@@ -181,17 +181,18 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!$token = auth()->attempt($credentials)) {
+
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Email or Password',
             ], 401);
         }
 
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         if(!$user->is_active) {
-            auth()->logout();
+            auth('api')->logout();
             return response()->json([
                 'success' => false,
                 'message' => 'Your account has been deactivated. Please contact the administrator.',
@@ -211,7 +212,7 @@ class AuthController extends Controller
     public function me()
         {
 
-            $user = auth()->user()->load(['roles', 'student', 'teacher', 'parent']);
+            $user = auth('api')->user()->load(['roles', 'student', 'teacher', 'parent']);
 
             return response()->json([
                 'success'=>true,
@@ -240,7 +241,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json([
             'success' => true,
@@ -253,7 +254,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('api')->refresh());
     }
 
     /**
@@ -262,14 +263,14 @@ class AuthController extends Controller
     protected function respondWithToken($token)
 
     {
-        $user = auth()->user()->load('roles');
+        $user = auth('api')->user()->load('roles');
 
         return response()->json([
             'success' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => config('jwt.ttl') * 60,
-            'user'=>$user(),
+            'user'=>$user,
             'roles'=> $user->roles->pluck('name'),
         ]);
     }
