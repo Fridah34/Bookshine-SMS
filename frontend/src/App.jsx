@@ -13,8 +13,8 @@ import {DashboardLayout} from "./components/layout/DashboardLayout";
 // Pages
 import { AdminDashboard }from "./pages/admin/AdminDashboard";
 import {TeacherDashboard} from "./pages/teacher/TeacherDashboard";
-import {StudentDashboard} from "./pages/student/StudentDashboard";
-
+import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentDashboardLayout from "./components/layout/StudentDashboardLayout";
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
 ------------------------------ */
@@ -95,7 +95,7 @@ export default function App() {
           <Route
             element={
               <ProtectedRoute allowedRoles={["student"]}>
-                <DashboardLayout role="student" />
+                <StudentDashboardLayout role="student" />
               </ProtectedRoute>
             }
           >
