@@ -17,12 +17,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh',[AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
-});
+
 
 //Admin routes
 Route::middleware('role:admin')->prefix('admin')->group(function(){
     Route::get('/dashboard', function(){
-        return response()->json(['message'=> 'Admin DAshboard']);
+        return response()->json(['message'=> 'Admin Dashboard']);
+
+    });
 
     //User management
     Route::get('/users/pending', [UserController::class, 'pending']);
@@ -46,9 +48,6 @@ Route::middleware('role:admin')->prefix('admin')->group(function(){
     Route::get('/teachers/{id}', [TeacherController::class,'show']);
     Route::put('/teachers/{id}', [TeacherController::class, 'update']);
     Route::delete('/teachers/{id}', [TeacherController::class,'destroy']);
-
-
-    });
 });
 
 // Teacher routes
@@ -65,7 +64,8 @@ Route::middleware('role:admin')->prefix('admin')->group(function(){
             return response()->json(['message' => 'Student Dashboard']);
         });
         // Add more student routes here
-
+    }); 
+    
     //Parent routes
     Route::middleware('role:parent,admin')->prefix('parent')->group(function(){
         Route::get('/dashboard', function(){

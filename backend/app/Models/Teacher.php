@@ -30,14 +30,15 @@ class Teacher extends Model
 
     public function classes()
     {
-        return $this->belongsToMany(Classes::class, 'class_teacher')
+        return $this->belongsToMany(Classes::class, 'class_teacher','teacher_id', 'class_id')
            ->withPivot('subject_id', 'academic_year_id')
            ->withTimestamps();
     }
 
-    public function classesAsClassTeacher()
+    public function classTeacherOf()
     {
         return $this->hasMany(Classes::class, 'class_teacher_id');
+           
     }
 
     //scopes

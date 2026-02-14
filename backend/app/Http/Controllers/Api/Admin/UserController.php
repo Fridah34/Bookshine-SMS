@@ -36,8 +36,8 @@ class UserController extends Controller
         $users= $query->paginate($request->get('per_page' , 15));
 
         return response() ->json([
-            'success' = true,
-            'data' = $users
+            'success' => true,
+            'data' => $users
         ]);
 
     }
