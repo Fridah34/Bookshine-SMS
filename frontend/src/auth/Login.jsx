@@ -1,9 +1,20 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, Sparkles, Shield, CheckCircle2, AlertCircle } from "lucide-react";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const  { login } = useAuth();
+
+  //✅ Get success message and pre-filled email
+  const successMessage = location.state?.message;
+  const prefilledEmail = location.state?.email;
+
+  const [formData, setFormData] = useState({ email: prefilledEmail || "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +29,7 @@ const Login = () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -38,20 +49,17 @@ const Login = () => {
 
     setLoading(true);
 
-    setTimeout(() => {
-      const mockUser = {
-        name: "Fridah Nthambi",
-        role: "admin",
-      };
-      
+    const result = await login (formData);
+
+    if (!result.success) {
+      setError(result.message || "login failed.Please try again.");
       setLoading(false);
-      alert(`Welcome back, ${mockUser.name}! Role: ${mockUser.role}`);
-      // In real app: login(mockUser); navigate(`/${mockUser.role}`);
-    }, 1500);
+    }
+    //If successful,useAuth will handle navigation
   };
 
   const navigateToRegister = () => {
-    alert("Navigate to register page");
+    navigate("/register");
     // In real app: navigate("/register");
   };
 
@@ -155,6 +163,21 @@ const Login = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">Sign in</h2>
                 <p className="text-gray-600">Enter your credentials to access your account</p>
               </div>
+
+              {/* ✅ Success Message */}
+              <AnimatePresence mode="wait">
+                {successMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mb-6 flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-xl"
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-green-700">{successMessage}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Error Message */}
               <AnimatePresence mode="wait">

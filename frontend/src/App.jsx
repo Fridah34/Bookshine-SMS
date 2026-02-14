@@ -28,8 +28,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   // Role-based restriction
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to={`/${user.role}`} replace />;
+  if (allowedRoles && !allowedRoles.some(role => user.roles?.some(r => r.name === role))) {
+    const userRole = user.roles?.[0]?.name || 'student';
+    return <Navigate to={`/${userRole}`} replace />;
   }
 
   return children;
@@ -105,9 +106,12 @@ export default function App() {
           <Route
             path="*"
             element={
-              <h1 className="text-center mt-10 text-xl font-semibold">
-                404 – Page Not Found
-              </h1>
+              <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold text-gray-800 mb-4">404</h1>
+                  <p className="text-xl text-gray-600">Page Not Found</p>
+                </div>
+              </div>
             }
           />
 

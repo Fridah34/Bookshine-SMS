@@ -18,7 +18,7 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Teacher::with(['user', 'classes', 'classesAsClassTeacher']);
+        $query = Teacher::with(['user', 'classes', 'classTeacherOf']);
 
         // Filters
         if ($request->has('status')) {
@@ -117,7 +117,7 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        $teacher = Teacher::with(['user', 'classes', 'classesAsClassTeacher'])->findOrFail($id);
+        $teacher = Teacher::with(['user', 'classes', 'classTeacherOf'])->findOrFail($id);
 
         return response()->json([
             'success' => true,

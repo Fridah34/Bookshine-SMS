@@ -15,16 +15,16 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!auth()->check()) {
+        if (!auth('api')->check()) {
             return response()->json([
                 'success' =>false,
                 'message' => 'Unauthenticated'
             ],401);
         }
 
-        $user = auth()->user();
+        $user = auth('api')->user();
 
-        if(!user->hasRole($roles)){
+        if(!$user->hasRole($roles)){
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized. Ypu do not have permission to access this resource.'

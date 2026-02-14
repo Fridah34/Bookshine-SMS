@@ -36,7 +36,7 @@ class Classes extends Model
 
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class, 'class_teacher')
+        return $this->belongsToMany(Teacher::class, 'class_teacher','class_id','teacher_id')
             ->withPivot('subject_id', 'academic_year_id')
             ->withTimestamps();
     }
