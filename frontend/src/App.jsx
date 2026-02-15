@@ -15,6 +15,12 @@ import { AdminDashboard }from "./pages/admin/AdminDashboard";
 import {TeacherDashboard} from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentDashboardLayout from "./components/layout/StudentDashboardLayout";
+import Courses from "./pages/student/Courses";
+import Assignments from "./pages/student/Assignments";
+import Schedule from "./pages/student/Schedule";
+import Grades from "./pages/student/Grades";
+import StudentLibrary from "./pages/student/StudentLibrary";
+import Profile from "./pages/student/Profile.jsx";
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
 ------------------------------ */
@@ -100,6 +106,12 @@ export default function App() {
             }
           >
             <Route path="/student" element={<StudentDashboard />} />
+            <Route path="/student/courses" element ={<Courses/>} />
+            <Route path="/student/assignments" element={<Assignments/>} />
+            <Route path="/student/schedule" element={<Schedule/>} />
+            <Route path="/student/grades" element={<Grades/>} />
+            <Route path="/student/library" element={<StudentLibrary/>} />
+            <Route path="/student/profile" element={<Profile/>} />
           </Route>
 
           {/* FALLBACK */}

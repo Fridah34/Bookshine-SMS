@@ -123,7 +123,7 @@ const StudentDashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 rounded-2xl p-8 text-white shadow-lg"
+        className="bg-gradient-to-r from-purple-600 via-violet-600 to-purple-400 rounded-2xl p-8 text-white shadow-lg"
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
