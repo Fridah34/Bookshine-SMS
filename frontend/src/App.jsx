@@ -11,7 +11,7 @@ import AuthLayout from "./components/layout/AuthLayout";
 import {DashboardLayout} from "./components/layout/DashboardLayout";
 
 // Pages
-import { AdminDashboard }from "./pages/admin/AdminDashboard";
+import  AdminDashboard from "./pages/admin/AdminDashboard";
 import {TeacherDashboard} from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentDashboardLayout from "./components/layout/StudentDashboardLayout";
@@ -21,6 +21,11 @@ import Schedule from "./pages/student/Schedule";
 import Grades from "./pages/student/Grades";
 import StudentLibrary from "./pages/student/StudentLibrary";
 import Profile from "./pages/student/Profile.jsx";
+import AdminDashboardLayout from "./components/layout/AdminDashboard.jsx";
+
+//Admin
+import Students from "./pages/admin/Students";
+
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
 ------------------------------ */
@@ -79,11 +84,12 @@ export default function App() {
           <Route
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <DashboardLayout role="admin" />
+                <AdminDashboardLayout role="admin" />
               </ProtectedRoute>
             }
           >
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="admin/students" element={<Students/>} />
           </Route>
 
           {/* TEACHER ROUTES */}
