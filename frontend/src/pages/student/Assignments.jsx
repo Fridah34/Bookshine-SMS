@@ -1,187 +1,167 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  ClipboardCheck,
-  Calendar,
-  Clock,
-  Filter,
-  Search,
-  AlertCircle,
-  CheckCircle,
-  FileText,
-  Upload,
-  Eye
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { ClipboardCheck, Calendar, Clock, AlertCircle, CheckCircle, FileText, BookOpen, ArrowLeft, ChevronRight } from 'lucide-react';
 
 const Assignments = () => {
   const [filterStatus, setFilterStatus] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
-  // Mock data
+  // Realistic Kenyan high school assignments
   const assignments = [
     {
       id: 1,
-      title: 'Calculus Problem Set 5',
-      course: 'Advanced Mathematics',
-      courseCode: 'MATH-401',
-      teacher: 'Dr. Sarah Johnson',
-      description: 'Complete problems 1-20 from Chapter 5. Show all work and provide detailed explanations for each solution.',
-      dueDate: '2026-02-18',
-      dueTime: '11:59 PM',
-      submittedDate: null,
+      title: 'Mathematics Assignment',
+      subject: 'Mathematics',
+      teacher: 'Mr. Kimani',
+      instruction: 'Complete Exercise 8.2 from KLB Mathematics Form 3 textbook, Questions 1-15. Show all working.',
+      dueDate: '2024-12-20',
+      assignedDate: '2024-12-13',
       status: 'pending',
       priority: 'high',
-      points: 50,
-      earnedPoints: null,
-      type: 'Problem Set',
-      instructions: [
-        'Show all work clearly',
-        'Write solutions on separate paper',
-        'Scan and upload as PDF',
-        'Check answers before submitting'
-      ],
-      attachments: [
-        { name: 'Problem Set 5.pdf', size: '1.2 MB' }
-      ]
+      type: 'Textbook Exercise',
+      color: 'from-blue-500 to-cyan-500',
+      textbookReference: 'KLB Mathematics Form 3, Page 156-158, Exercise 8.2',
+      notes: 'Focus on sine and cosine rules. Remember to label all diagrams clearly.'
     },
     {
       id: 2,
-      title: 'Physics Lab Report 3',
-      course: 'Physics',
-      courseCode: 'PHY-301',
-      teacher: 'Prof. Michael Chen',
-      description: 'Write a comprehensive lab report on the pendulum experiment conducted in class. Include data analysis and conclusions.',
-      dueDate: '2026-02-20',
-      dueTime: '11:59 PM',
-      submittedDate: '2026-02-19',
-      status: 'submitted',
-      priority: 'medium',
-      points: 100,
-      earnedPoints: null,
-      type: 'Lab Report',
-      instructions: [
-        'Follow lab report format',
-        'Include graphs and tables',
-        'Minimum 5 pages',
-        'Cite all sources'
-      ],
-      attachments: [
-        { name: 'Lab Instructions.pdf', size: '890 KB' },
-        { name: 'Data Sheet.xlsx', size: '45 KB' }
-      ]
+      title: 'English Composition',
+      subject: 'English',
+      teacher: 'Mrs. Wanjiru',
+      instruction: 'Write a 450-word descriptive essay on the topic: "A Busy Market Day". Use descriptive language and proper grammar.',
+      dueDate: '2024-12-22',
+      assignedDate: '2024-12-14',
+      status: 'in-progress',
+      priority: 'high',
+      type: 'Essay',
+      color: 'from-purple-500 to-pink-500',
+      textbookReference: 'Essay writing guidelines from class notes',
+      notes: 'Introduction, body (3 paragraphs), conclusion. Check grammar and spelling before submission.'
     },
     {
       id: 3,
-      title: 'Shakespeare Essay',
-      course: 'English Literature',
-      courseCode: 'ENG-401',
-      teacher: 'Ms. Emily Brown',
-      description: 'Write a 5-page essay analyzing the themes of love and betrayal in "Othello". Include at least 5 scholarly sources.',
-      dueDate: '2026-02-22',
-      dueTime: '11:59 PM',
-      submittedDate: null,
-      status: 'in-progress',
-      priority: 'high',
-      points: 150,
-      earnedPoints: null,
-      type: 'Essay',
-      instructions: [
-        'MLA format required',
-        '5-7 pages double-spaced',
-        'Include works cited page',
-        'Use scholarly sources only'
-      ],
-      attachments: [
-        { name: 'Essay Guidelines.pdf', size: '650 KB' },
-        { name: 'Citation Guide.pdf', size: '320 KB' }
-      ]
+      title: 'Kiswahili Insha',
+      subject: 'Kiswahili',
+      teacher: 'Mwalimu Omondi',
+      instruction: 'Andika barua rasmi kwa mkurugenzi wa shule yako ukiomba ruhusa ya kuhudhuria mazishi ya jamaa yako.',
+      dueDate: '2024-12-21',
+      assignedDate: '2024-12-12',
+      status: 'submitted',
+      priority: 'medium',
+      type: 'Insha',
+      color: 'from-green-500 to-emerald-500',
+      textbookReference: 'Muundo wa barua rasmi - Class notes',
+      notes: 'Tumia muundo sahihi wa barua rasmi. Angalia makosa ya tahajia.'
     },
     {
       id: 4,
-      title: 'Chemical Reactions Quiz',
-      course: 'Chemistry',
-      courseCode: 'CHEM-301',
-      teacher: 'Dr. Robert Wilson',
-      description: 'Complete the online quiz covering chapters 6-8. You will have 45 minutes to complete 25 multiple choice questions.',
-      dueDate: '2026-02-16',
-      dueTime: '2:00 PM',
-      submittedDate: '2026-02-15',
-      status: 'graded',
-      priority: 'low',
-      points: 50,
-      earnedPoints: 47,
-      type: 'Quiz',
-      instructions: [
-        'Single attempt only',
-        '45 minute time limit',
-        'No notes allowed',
-        'Must complete in one sitting'
-      ],
-      attachments: []
+      title: 'Chemistry Lab Report',
+      subject: 'Chemistry',
+      teacher: 'Dr. Mwangi',
+      instruction: 'Write a practical report on the acid-base titration experiment done in class. Include aim, apparatus, procedure, results, and conclusion.',
+      dueDate: '2024-12-20',
+      assignedDate: '2024-12-11',
+      status: 'submitted',
+      priority: 'high',
+      type: 'Lab Report',
+      color: 'from-orange-500 to-amber-500',
+      textbookReference: 'Practical notebook - Experiment 12',
+      notes: 'Use the standard lab report format. Include all observations and calculations.'
     },
     {
       id: 5,
-      title: 'World War II Research Paper',
-      course: 'World History',
-      courseCode: 'HIST-301',
-      teacher: 'Mr. David Martinez',
-      description: 'Research and write a 10-page paper on a specific aspect of World War II. Choose from approved topics list.',
-      dueDate: '2026-02-28',
-      dueTime: '11:59 PM',
-      submittedDate: null,
-      status: 'pending',
-      priority: 'medium',
-      points: 200,
-      earnedPoints: null,
-      type: 'Research Paper',
-      instructions: [
-        'Chicago style citations',
-        '10-12 pages',
-        'Minimum 8 sources',
-        'Include primary sources',
-        'Topic must be approved'
-      ],
-      attachments: [
-        { name: 'Topic List.pdf', size: '450 KB' },
-        { name: 'Research Guidelines.pdf', size: '780 KB' }
-      ]
+      title: 'Physics Problems',
+      subject: 'Physics',
+      teacher: 'Mr. Njoroge',
+      instruction: 'Solve problems 1-20 on Ohm\'s Law and electrical circuits from the textbook page 210.',
+      dueDate: '2024-12-19',
+      assignedDate: '2024-12-10',
+      status: 'overdue',
+      priority: 'high',
+      type: 'Problem Set',
+      color: 'from-indigo-500 to-purple-500',
+      textbookReference: 'KLB Physics Form 3, Page 210, Questions 1-20',
+      notes: 'Show all calculations. Draw circuit diagrams where necessary.'
     },
     {
       id: 6,
-      title: 'Python Programming Project',
-      course: 'Computer Science',
-      courseCode: 'CS-201',
-      teacher: 'Ms. Lisa Park',
-      description: 'Create a working calculator application using Python. Must include all basic operations and handle errors properly.',
-      dueDate: '2026-02-24',
-      dueTime: '11:59 PM',
-      submittedDate: null,
+      title: 'Biology Diagrams',
+      subject: 'Biology',
+      teacher: 'Mrs. Akinyi',
+      instruction: 'Draw and label: (1) Human digestive system, (2) Plant cell, (3) Human heart. Use your textbook for reference.',
+      dueDate: '2024-12-23',
+      assignedDate: '2024-12-15',
+      status: 'pending',
+      priority: 'medium',
+      type: 'Diagrams',
+      color: 'from-teal-500 to-cyan-500',
+      textbookReference: 'KLB Biology Form 3, Pages 45, 78, 102',
+      notes: 'Use pencil for diagrams. Label all parts clearly. Include functions for each organ.'
+    },
+    {
+      id: 7,
+      title: 'History Essay',
+      subject: 'History & Government',
+      teacher: 'Mr. Mutua',
+      instruction: 'Write an essay (600 words) on: "Discuss the effects of colonial rule on the economy of Kenya."',
+      dueDate: '2024-12-22',
+      assignedDate: '2024-12-13',
       status: 'in-progress',
+      priority: 'medium',
+      type: 'Essay',
+      color: 'from-red-500 to-rose-500',
+      textbookReference: 'History textbook Chapter 9-10',
+      notes: 'Include: Introduction, positive effects, negative effects, conclusion. Give specific examples.'
+    },
+    {
+      id: 8,
+      title: 'Geography Map Work',
+      subject: 'Geography',
+      teacher: 'Mrs. Chepkemoi',
+      instruction: 'Complete the topographic map questions 1-8 from your workbook. Calculate distances, heights, and draw cross-sections.',
+      dueDate: '2024-12-20',
+      assignedDate: '2024-12-12',
+      status: 'pending',
       priority: 'high',
-      points: 100,
-      earnedPoints: null,
-      type: 'Programming Project',
-      instructions: [
-        'Use Python 3.x',
-        'Include comments in code',
-        'Test all functions',
-        'Submit as .py file',
-        'Include README'
-      ],
-      attachments: [
-        { name: 'Project Requirements.pdf', size: '1.1 MB' },
-        { name: 'Starter Code.zip', size: '15 KB' }
-      ]
+      type: 'Map Work',
+      color: 'from-emerald-500 to-green-600',
+      textbookReference: 'Geography Workbook, Map Exercise 5',
+      notes: 'Use a ruler and pencil. Show all calculations for distances and heights.'
+    },
+    {
+      id: 9,
+      title: 'Business Studies Case Study',
+      subject: 'Business Studies',
+      teacher: 'Mr. Otieno',
+      instruction: 'Read the case study on page 89 about Safaricom Ltd. Answer questions 1-6 at the end of the case study.',
+      dueDate: '2024-12-21',
+      assignedDate: '2024-12-14',
+      status: 'pending',
+      priority: 'low',
+      type: 'Case Study',
+      color: 'from-yellow-500 to-amber-500',
+      textbookReference: 'Business Studies Form 3, Page 89-92',
+      notes: 'Give detailed answers with examples from the case study.'
+    },
+    {
+      id: 10,
+      title: 'Computer Studies Practical',
+      subject: 'Computer Studies',
+      teacher: 'Ms. Waithera',
+      instruction: 'Create a spreadsheet showing your family budget for one month. Include income, expenses, and calculate savings. Use formulas.',
+      dueDate: '2024-12-23',
+      assignedDate: '2024-12-15',
+      status: 'pending',
+      priority: 'medium',
+      type: 'Practical Work',
+      color: 'from-violet-500 to-purple-500',
+      textbookReference: 'MS Excel practical notes',
+      notes: 'Use SUM, AVERAGE formulas. Format the spreadsheet properly. Save as: YourName_Budget.xlsx'
     }
   ];
 
   const filteredAssignments = assignments.filter(assignment => {
-    const matchesFilter = filterStatus === 'all' || assignment.status === filterStatus;
-    const matchesSearch = 
-      assignment.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      assignment.course.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesFilter && matchesSearch;
+    if (filterStatus === 'all') return true;
+    return assignment.status === filterStatus;
   });
 
   const getStatusColor = (status) => {
@@ -191,9 +171,9 @@ const Assignments = () => {
       case 'in-progress':
         return 'bg-blue-100 text-blue-700 border-blue-200';
       case 'submitted':
-        return 'bg-purple-100 text-purple-700 border-purple-200';
-      case 'graded':
         return 'bg-green-100 text-green-700 border-green-200';
+      case 'overdue':
+        return 'bg-red-100 text-red-700 border-red-200';
       default:
         return 'bg-gray-100 text-gray-700 border-gray-200';
     }
@@ -215,10 +195,12 @@ const Assignments = () => {
   const getDaysUntilDue = (dueDate) => {
     const due = new Date(dueDate);
     const now = new Date();
+    due.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
     const diff = due - now;
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
     
-    if (days < 0) return 'Overdue';
+    if (days < 0) return `${Math.abs(days)} day${Math.abs(days) !== 1 ? 's' : ''} overdue`;
     if (days === 0) return 'Due today';
     if (days === 1) return 'Due tomorrow';
     return `Due in ${days} days`;
@@ -229,309 +211,272 @@ const Assignments = () => {
     pending: assignments.filter(a => a.status === 'pending').length,
     'in-progress': assignments.filter(a => a.status === 'in-progress').length,
     submitted: assignments.filter(a => a.status === 'submitted').length,
-    graded: assignments.filter(a => a.status === 'graded').length
+    overdue: assignments.filter(a => a.status === 'overdue').length
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">Assignments</h1>
-        <p className="text-gray-600 mt-1">
-          Track and submit your assignments
-        </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        {[
-          { label: 'All', value: statusCounts.all, status: 'all', color: 'bg-gray-100' },
-          { label: 'Pending', value: statusCounts.pending, status: 'pending', color: 'bg-yellow-100' },
-          { label: 'In Progress', value: statusCounts['in-progress'], status: 'in-progress', color: 'bg-blue-100' },
-          { label: 'Submitted', value: statusCounts.submitted, status: 'submitted', color: 'bg-purple-100' },
-          { label: 'Graded', value: statusCounts.graded, status: 'graded', color: 'bg-green-100' }
-        ].map((stat) => (
-          <button
-            key={stat.status}
-            onClick={() => setFilterStatus(stat.status)}
-            className={`p-4 rounded-xl transition-all ${
-              filterStatus === stat.status
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
-                : `${stat.color} text-gray-700 hover:shadow-md`
-            }`}
-          >
-            <p className="text-2xl font-bold">{stat.value}</p>
-            <p className="text-sm">{stat.label}</p>
-          </button>
-        ))}
-      </div>
-
-      {/* Search and Filter */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="Search assignments..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-          />
-        </div>
-      </div>
-
-      {/* Assignments List */}
-      <div className="space-y-4">
-        {filteredAssignments.map((assignment, index) => (
-          <motion.div
-            key={assignment.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            onClick={() => setSelectedAssignment(assignment)}
-            className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all cursor-pointer p-6"
-          >
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Left: Assignment Info */}
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-800">{assignment.title}</h3>
-                    <p className="text-sm text-gray-600">
-                      {assignment.course} • {assignment.courseCode}
-                    </p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityColor(assignment.priority)}`}>
-                    {assignment.priority.toUpperCase()}
-                  </span>
-                </div>
-
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {assignment.description}
-                </p>
-
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <Calendar size={16} />
-                    {getDaysUntilDue(assignment.dueDate)}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock size={16} />
-                    {new Date(assignment.dueDate).toLocaleDateString()} at {assignment.dueTime}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <ClipboardCheck size={16} />
-                    {assignment.points} points
-                  </div>
-                  {assignment.attachments.length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <FileText size={16} />
-                      {assignment.attachments.length} attachment{assignment.attachments.length > 1 ? 's' : ''}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Right: Status and Actions */}
-              <div className="flex flex-col items-end justify-between gap-2">
-                <span className={`px-4 py-2 rounded-lg text-sm font-medium border ${getStatusColor(assignment.status)}`}>
-                  {assignment.status === 'in-progress' ? 'In Progress' : 
-                   assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
-                </span>
-
-                {assignment.status === 'graded' && assignment.earnedPoints && (
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-green-600">
-                      {assignment.earnedPoints}/{assignment.points}
-                    </p>
-                    <p className="text-xs text-gray-500">Score</p>
-                  </div>
-                )}
-
-                {assignment.status === 'submitted' && (
-                  <div className="flex items-center gap-2 text-purple-600">
-                    <CheckCircle size={16} />
-                    <span className="text-sm font-medium">Submitted</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-
-        {filteredAssignments.length === 0 && (
-          <div className="text-center py-12">
-            <ClipboardCheck className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">No assignments found</p>
+  // List View
+  if (!selectedAssignment) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 font-sans">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8 animate-fade-in">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+              Assignments
+            </h1>
+            <p className="text-slate-600 text-lg">
+              Track your homework and submissions
+            </p>
           </div>
-        )}
-      </div>
 
-      {/* Assignment Detail Modal */}
-      {selectedAssignment && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedAssignment(null)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
-          >
-            {/* Modal Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-8 text-white">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-2">{selectedAssignment.title}</h2>
-                  <p className="text-white/90">{selectedAssignment.course}</p>
-                  <p className="text-white/80 text-sm">Teacher: {selectedAssignment.teacher}</p>
-                </div>
-                <button
-                  onClick={() => setSelectedAssignment(null)}
-                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedAssignment.status)} bg-white/20 border-white/30`}>
-                  {selectedAssignment.status.charAt(0).toUpperCase() + selectedAssignment.status.slice(1)}
-                </span>
-                <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                  {selectedAssignment.type}
-                </span>
-                <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                  {selectedAssignment.points} points
-                </span>
-              </div>
-            </div>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            {[
+              { label: 'All', value: statusCounts.all, status: 'all', color: 'from-gray-500 to-slate-500' },
+              { label: 'Pending', value: statusCounts.pending, status: 'pending', color: 'from-yellow-500 to-amber-500' },
+              { label: 'In Progress', value: statusCounts['in-progress'], status: 'in-progress', color: 'from-blue-500 to-cyan-500' },
+              { label: 'Submitted', value: statusCounts.submitted, status: 'submitted', color: 'from-green-500 to-emerald-500' },
+              { label: 'Overdue', value: statusCounts.overdue, status: 'overdue', color: 'from-red-500 to-rose-500' }
+            ].map((stat) => (
+              <button
+                key={stat.status}
+                onClick={() => setFilterStatus(stat.status)}
+                className={`p-6 rounded-2xl transition-all duration-300 ${
+                  filterStatus === stat.status
+                    ? `bg-gradient-to-br ${stat.color} text-white shadow-xl scale-105`
+                    : 'bg-white/70 backdrop-blur-lg border border-white/80 text-slate-700 hover:shadow-lg hover:scale-105'
+                }`}
+              >
+                <p className="text-3xl font-bold mb-1">{stat.value}</p>
+                <p className="text-sm font-medium">{stat.label}</p>
+              </button>
+            ))}
+          </div>
 
-            <div className="p-8 space-y-6">
-              {/* Due Date Alert */}
-              <div className={`p-4 rounded-lg border ${
-                getDaysUntilDue(selectedAssignment.dueDate).includes('Overdue')
-                  ? 'bg-red-50 border-red-200'
-                  : getDaysUntilDue(selectedAssignment.dueDate).includes('today')
-                  ? 'bg-yellow-50 border-yellow-200'
-                  : 'bg-blue-50 border-blue-200'
-              }`}>
-                <div className="flex items-center gap-3">
-                  <AlertCircle className={
-                    getDaysUntilDue(selectedAssignment.dueDate).includes('Overdue')
-                      ? 'text-red-600'
-                      : getDaysUntilDue(selectedAssignment.dueDate).includes('today')
-                      ? 'text-yellow-600'
-                      : 'text-blue-600'
-                  } />
-                  <div>
-                    <p className="font-semibold text-gray-800">
-                      {getDaysUntilDue(selectedAssignment.dueDate)}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })} at {selectedAssignment.dueTime}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Description</h3>
-                <p className="text-gray-600 leading-relaxed">{selectedAssignment.description}</p>
-              </div>
-
-              {/* Instructions */}
-              <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Instructions</h3>
-                <ul className="space-y-2">
-                  {selectedAssignment.instructions.map((instruction, index) => (
-                    <li key={index} className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle size={20} className="text-purple-600 flex-shrink-0 mt-0.5" />
-                      {instruction}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Attachments */}
-              {selectedAssignment.attachments.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">Attachments</h3>
-                  <div className="space-y-2">
-                    {selectedAssignment.attachments.map((file, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <FileText className="w-5 h-5 text-purple-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">{file.name}</p>
-                            <p className="text-sm text-gray-500">{file.size}</p>
-                          </div>
+          {/* Assignments List */}
+          <div className="space-y-4">
+            {filteredAssignments.map((assignment, index) => (
+              <div
+                key={assignment.id}
+                onClick={() => setSelectedAssignment(assignment)}
+                className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              >
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Left: Subject Badge and Info */}
+                  <div className="flex items-start gap-4 flex-1">
+                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${assignment.color} flex items-center justify-center flex-shrink-0 shadow-md`}>
+                      <BookOpen className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="text-xl font-bold text-slate-800">{assignment.title}</h3>
+                          <p className="text-sm text-slate-600">{assignment.subject} • {assignment.teacher}</p>
                         </div>
-                        <Eye className="w-5 h-5 text-gray-400" />
                       </div>
-                    ))}
+                      <p className="text-slate-700 text-sm mb-3 line-clamp-2">{assignment.instruction}</p>
+                      
+                      <div className="flex flex-wrap items-center gap-3 text-sm">
+                        <div className="flex items-center gap-1 text-slate-600">
+                          <Calendar className="w-4 h-4" />
+                          <span className="font-medium">{getDaysUntilDue(assignment.dueDate)}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-slate-600">
+                          <Clock className="w-4 h-4" />
+                          {new Date(assignment.dueDate).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityColor(assignment.priority)}`}>
+                          {assignment.priority.toUpperCase()} PRIORITY
+                        </span>
+                        <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-semibold">
+                          {assignment.type}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Status */}
+                  <div className="flex flex-col items-end justify-between">
+                    <span className={`px-4 py-2 rounded-xl text-sm font-semibold border-2 ${getStatusColor(assignment.status)}`}>
+                      {assignment.status === 'in-progress' ? 'In Progress' : 
+                       assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                    </span>
+                    <ChevronRight className="w-6 h-6 text-slate-400 mt-2" />
                   </div>
                 </div>
-              )}
+              </div>
+            ))}
 
-              {/* Submission Status */}
-              {selectedAssignment.submittedDate && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-700 mb-2">
-                    <CheckCircle size={20} />
-                    <span className="font-semibold">Submitted</span>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Submitted on {new Date(selectedAssignment.submittedDate).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </p>
-                </div>
-              )}
-
-              {/* Grade Display */}
-              {selectedAssignment.status === 'graded' && selectedAssignment.earnedPoints !== null && (
-                <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-2">Your Score</p>
-                    <p className="text-5xl font-bold text-green-600">
-                      {selectedAssignment.earnedPoints}/{selectedAssignment.points}
-                    </p>
-                    <p className="text-lg text-gray-700 mt-2">
-                      {Math.round((selectedAssignment.earnedPoints / selectedAssignment.points) * 100)}%
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Button */}
-              {!selectedAssignment.submittedDate && selectedAssignment.status !== 'graded' && (
-                <button className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg transition-all flex items-center justify-center gap-2">
-                  <Upload size={20} />
-                  Submit Assignment
-                </button>
-              )}
-            </div>
-          </motion.div>
+            {filteredAssignments.length === 0 && (
+              <div className="text-center py-12 bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl">
+                <ClipboardCheck className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-500">No assignments found</p>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  // Detail View
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 font-sans">
+      <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => setSelectedAssignment(null)}
+          className="mb-6 flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-lg border border-white/80 rounded-xl shadow-lg hover:scale-105 transition-all duration-300"
+        >
+          <ArrowLeft className="w-5 h-5 text-indigo-600" />
+          <span className="font-medium text-slate-700">Back to Assignments</span>
+        </button>
+
+        {/* Assignment Header */}
+        <div className={`bg-gradient-to-br ${selectedAssignment.color} rounded-2xl p-8 shadow-xl mb-8 text-white`}>
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold mb-2">{selectedAssignment.title}</h1>
+              <p className="text-white/90 text-lg">{selectedAssignment.subject}</p>
+              <p className="text-white/80">Teacher: {selectedAssignment.teacher}</p>
+            </div>
+            <span className={`px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-semibold border border-white/30`}>
+              {selectedAssignment.type}
+            </span>
+          </div>
+          
+          <div className="flex flex-wrap gap-2 mt-4">
+            <span className={`px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold`}>
+              {selectedAssignment.status.charAt(0).toUpperCase() + selectedAssignment.status.slice(1)}
+            </span>
+            <span className={`px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold`}>
+              {selectedAssignment.priority.toUpperCase()} Priority
+            </span>
+          </div>
+        </div>
+
+        {/* Due Date Alert */}
+        <div className={`p-4 rounded-xl border-2 mb-8 ${
+          selectedAssignment.status === 'overdue'
+            ? 'bg-red-50 border-red-200'
+            : getDaysUntilDue(selectedAssignment.dueDate).includes('today')
+            ? 'bg-yellow-50 border-yellow-200'
+            : 'bg-blue-50 border-blue-200'
+        }`}>
+          <div className="flex items-center gap-3">
+            <AlertCircle className={`w-6 h-6 ${
+              selectedAssignment.status === 'overdue'
+                ? 'text-red-600'
+                : getDaysUntilDue(selectedAssignment.dueDate).includes('today')
+                ? 'text-yellow-600'
+                : 'text-blue-600'
+            }`} />
+            <div>
+              <p className="font-bold text-slate-800 text-lg">
+                {getDaysUntilDue(selectedAssignment.dueDate)}
+              </p>
+              <p className="text-sm text-slate-600">
+                Due: {new Date(selectedAssignment.dueDate).toLocaleDateString('en-GB', {
+                  weekday: 'long',
+                  day: '2-digit',
+                  month: 'long',
+                  year: 'numeric'
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Assignment Details */}
+        <div className="space-y-6">
+          {/* Instructions */}
+          <div className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl p-6 shadow-lg">
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">Instructions</h3>
+            <p className="text-slate-700 leading-relaxed">{selectedAssignment.instruction}</p>
+          </div>
+
+          {/* Textbook Reference */}
+          <div className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl p-6 shadow-lg">
+            <h3 className="text-xl font-bold text-slate-800 mb-4">Textbook Reference</h3>
+            <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
+              <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-indigo-600" />
+              </div>
+              <p className="text-slate-700 font-medium">{selectedAssignment.textbookReference}</p>
+            </div>
+          </div>
+
+          {/* Teacher's Notes */}
+          {selectedAssignment.notes && (
+            <div className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl p-6 shadow-lg">
+              <h3 className="text-xl font-bold text-slate-800 mb-4">Teacher's Notes</h3>
+              <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <FileText className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <p className="text-slate-700">{selectedAssignment.notes}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Assignment Info */}
+          <div className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-2xl p-6 shadow-lg">
+            <h3 className="text-xl font-bold text-slate-800 mb-4">Assignment Details</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 rounded-xl">
+                <p className="text-sm text-slate-600 mb-1">Assigned Date</p>
+                <p className="font-semibold text-slate-800">
+                  {new Date(selectedAssignment.assignedDate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                  })}
+                </p>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-xl">
+                <p className="text-sm text-slate-600 mb-1">Due Date</p>
+                <p className="font-semibold text-slate-800">
+                  {new Date(selectedAssignment.dueDate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                  })}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Status Message */}
+          {selectedAssignment.status === 'submitted' && (
+            <div className="p-6 bg-green-50 border-2 border-green-200 rounded-2xl">
+              <div className="flex items-center gap-3 text-green-700">
+                <CheckCircle className="w-6 h-6" />
+                <div>
+                  <p className="font-bold text-lg">Assignment Submitted</p>
+                  <p className="text-sm text-green-600">Your work has been submitted to {selectedAssignment.teacher} for marking.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reminder Note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <div className="flex gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-amber-900 mb-1">Reminder</p>
+                <p className="text-xs text-amber-800">
+                  All assignments must be written in your exercise book and submitted to your teacher. Make sure your work is neat and clearly labeled with your name and admission number.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Assignments ;
+export default Assignments;
