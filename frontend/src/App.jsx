@@ -21,10 +21,11 @@ import Schedule from "./pages/student/Schedule";
 import Grades from "./pages/student/Grades";
 import StudentLibrary from "./pages/student/StudentLibrary";
 import Profile from "./pages/student/Profile.jsx";
-import AdminDashboardLayout from "./components/layout/AdminDashboard.jsx";
+import AdminDashboardLayout from "./components/layout/AdminDashboardLayout";
 
 //Admin
 import Students from "./pages/admin/Students";
+import Teachers from "./pages/admin/Teachers";
 
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
@@ -89,7 +90,8 @@ export default function App() {
             }
           >
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="admin/students" element={<Students/>} />
+            <Route path="/admin/students" element={<Students/>} />
+            <Route path="/admin/teachers" element={<Teachers/>} />
           </Route>
 
           {/* TEACHER ROUTES */}
