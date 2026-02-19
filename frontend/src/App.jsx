@@ -26,6 +26,8 @@ import AdminDashboardLayout from "./components/layout/AdminDashboardLayout";
 //Admin
 import Students from "./pages/admin/Students";
 import Teachers from "./pages/admin/Teachers";
+import AcademicRecords from "./pages/admin/AcademicRecords";
+import Classes from "./pages/admin/Classes";
 
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
@@ -92,6 +94,8 @@ export default function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/students" element={<Students/>} />
             <Route path="/admin/teachers" element={<Teachers/>} />
+            <Route path="/admin/academics" element={<AcademicRecords/>} />
+            <Route path="/admin/classes" element={< Classes/>} />
           </Route>
 
           {/* TEACHER ROUTES */}
