@@ -28,6 +28,10 @@ import Students from "./pages/admin/Students";
 import Teachers from "./pages/admin/Teachers";
 import AcademicRecords from "./pages/admin/AcademicRecords";
 import Classes from "./pages/admin/Classes";
+import Attendance from "./pages/admin/Attendance";
+import FeeManagement from "./pages/admin/FeeManagement";
+import Timetable from "./pages/admin/Timetable";
+import Reports from "./pages/admin/Reports";
 
 /* -----------------------------
    INLINE PROTECTED ROUTE (RBAC)
@@ -96,6 +100,10 @@ export default function App() {
             <Route path="/admin/teachers" element={<Teachers/>} />
             <Route path="/admin/academics" element={<AcademicRecords/>} />
             <Route path="/admin/classes" element={< Classes/>} />
+            <Route path="/admin/attendance" element={<Attendance/>} />
+            <Route path="/admin/fees" element={< FeeManagement/> } />
+            <Route path="/admin/timetable" element={< Timetable/> } />
+            <Route path="/admin/reports" element={<Reports/>} />
           </Route>
 
           {/* TEACHER ROUTES */}
